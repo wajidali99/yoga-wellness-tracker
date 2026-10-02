@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
 
@@ -36,4 +37,6 @@ export const auth = betterAuth({
       },
     },
   },
+  // lets server actions set/refresh the login cookie (must be the last plugin)
+  plugins: [nextCookies()],
 });

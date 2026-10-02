@@ -129,6 +129,12 @@ export default async function DashboardPage() {
                 <ShieldCheck size={16} /> Admin Panel
               </Link>
             )}
+            <Link href="/profile" className="rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
+              Edit profile
+            </Link>
+            <Link href="/profile" className="rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
+              Edit profile
+            </Link>
             <SignOutButton />
           </div>
         </div>

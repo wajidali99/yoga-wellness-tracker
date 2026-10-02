@@ -66,7 +66,16 @@ export default function NavbarClient({ user }: { user: User }) {
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              <span className="hidden text-sm text-gray-600 md:inline">Hi, {user.name.split(" ")[0]}</span>
+              <Link
+                href="/profile"
+                className="hidden items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm text-gray-700 hover:bg-brand-50 md:flex"
+                title="Edit profile"
+              >
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-700">
+                  {user.name.charAt(0).toUpperCase()}
+                </span>
+                {user.name.split(" ")[0]}
+              </Link>
               <button
                 onClick={logout}
                 className="hidden items-center gap-1.5 rounded-full border border-gray-200 px-4 py-1.5 text-sm text-gray-700 hover:bg-gray-50 lg:flex"
@@ -103,9 +112,18 @@ export default function NavbarClient({ user }: { user: User }) {
             </Link>
           ))}
           {user && (
-            <button onClick={logout} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-red-600">
-              Sign out
-            </button>
+            <>
+              <Link
+                href="/profile"
+                onClick={() => setOpen(false)}
+                className={`block rounded-lg px-3 py-2 text-sm ${isActive("/profile") ? "bg-brand-50 font-semibold text-brand-700" : "text-gray-700"}`}
+              >
+                Profile
+              </Link>
+              <button onClick={logout} className="block w-full rounded-lg px-3 py-2 text-left text-sm text-red-600">
+                Sign out
+              </button>
+            </>
           )}
         </nav>
       )}
