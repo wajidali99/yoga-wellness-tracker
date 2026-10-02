@@ -10,6 +10,7 @@ type User = { name: string; isAdmin: boolean } | null;
 
 const APP_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
+  { href: "/progress", label: "Progress" },
   { href: "/poses", label: "Poses" },
   { href: "/questionnaire", label: "My Plan" },
   { href: "/pose-checker", label: "Pose Checker" },
@@ -40,7 +41,7 @@ export default function NavbarClient({ user }: { user: User }) {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-brand-100/70 bg-white/80 backdrop-blur">
+    <header className="sticky top-0 print:hidden z-40 border-b border-brand-100/70 bg-white/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 font-bold text-brand-800">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-white shadow-sm">
