@@ -45,6 +45,8 @@ model User {
   meditations   MeditationSession[]
   poseChecks    PoseCheck[]
   hostedSessions GroupSession[]
+  reviews       Review[]
+  activityLogs  ActivityLog[]
 
   @@map("user")
 }
@@ -164,4 +166,28 @@ model GroupSession {
   host      User     @relation(fields: [hostId], references: [id], onDelete: Cascade)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
+}
+
+// ---------- Reviews & Activity Logs ----------
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating    Int
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }

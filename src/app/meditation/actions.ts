@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activity";
 
 type Input = {
   type: "breathing" | "meditation";
@@ -27,5 +28,7 @@ export async function saveMeditationSession(input: Input) {
       completed: input.completed,
     },
   });
+
+  await logActivity(session.user.id, "MEDITATION_SESSION", `${input.type}, ${Math.round(input.durationSeconds)}s`);
   return { ok: true };
 }

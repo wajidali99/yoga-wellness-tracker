@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activity";
 import { getGoal, validateAnswers, recommend } from "@/lib/questionnaire";
 
 type Result = { ok: true; id: string } | { ok: false; error: string };
@@ -23,5 +24,6 @@ export async function submitQuestionnaire(goalId: string, answers: Record<string
     data: { userId: session.user.id, primaryGoal: goalId, answers, yogaTypeId: yogaType.id },
   });
 
+  await logActivity(session.user.id, "QUESTIONNAIRE_SUBMITTED", `${goalId} -> ${slug}`);
   return { ok: true, id: response.id };
 }

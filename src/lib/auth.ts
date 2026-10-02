@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activity";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -15,7 +16,23 @@ export const auth = betterAuth({
       role: {
         type: "string",
         defaultValue: "USER",
-        input: false,
+        input: false, // users cannot set their own role
+      },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          await logActivity(user.id, "SIGN_UP", user.email);
+        },
+      },
+    },
+    session: {
+      create: {
+        after: async (session) => {
+          await logActivity(session.userId, "LOGIN");
+        },
       },
     },
   },

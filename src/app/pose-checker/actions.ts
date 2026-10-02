@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activity";
 import { SUPPORTED_POSES } from "@/lib/pose-classifier";
 
 type Input = { poseSlug: string; bestConfidence: number; heldSeconds: number };
@@ -14,15 +15,12 @@ export async function savePoseCheck(input: Input) {
 
   const heldSeconds = Math.max(0, Math.min(3600, Math.round(input.heldSeconds)));
   const bestConfidence = Math.max(0, Math.min(1, input.bestConfidence));
+  const correct = heldSeconds >= 3;
 
   await prisma.poseCheck.create({
-    data: {
-      userId: session.user.id,
-      poseSlug: input.poseSlug,
-      bestConfidence,
-      heldSeconds,
-      correct: heldSeconds >= 3, // held correctly for at least 3 seconds
-    },
+    data: { userId: session.user.id, poseSlug: input.poseSlug, bestConfidence, heldSeconds, correct },
   });
+
+  await logActivity(session.user.id, "POSE_CHECK", `${input.poseSlug}: ${correct ? "correct" : "not yet"}, held ${heldSeconds}s`);
   return { ok: true };
 }
