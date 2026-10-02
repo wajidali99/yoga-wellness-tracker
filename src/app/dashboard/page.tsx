@@ -30,7 +30,10 @@ export default async function DashboardPage() {
             </div>
           ))}
         </div>
-        <div className="mt-6 text-center">
+        <div className="mt-6 flex justify-center gap-3">
+          <a href="/questionnaire" className="rounded-md bg-sky-500 px-4 py-2 text-sm text-white hover:bg-sky-600">
+            Take the questionnaire
+          </a>
           <SignOutButton />
         </div>
       </div>

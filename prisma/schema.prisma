@@ -41,6 +41,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  responses     QuestionnaireResponse[]
 
   @@map("user")
 }
@@ -90,4 +91,32 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// ---------- Questionnaire & Recommendation ----------
+
+model YogaType {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  description     String
+  primaryBenefit  String
+  frequency       String
+  focusArea       String
+  durationMinutes Int
+  poseSlugs       String[]
+  responses       QuestionnaireResponse[]
+}
+
+model QuestionnaireResponse {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  primaryGoal String
+  answers     Json
+  yogaTypeId  String
+  yogaType    YogaType @relation(fields: [yogaTypeId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
 }
