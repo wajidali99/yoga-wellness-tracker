@@ -42,6 +42,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   responses     QuestionnaireResponse[]
+  meditations   MeditationSession[]
 
   @@map("user")
 }
@@ -117,6 +118,21 @@ model QuestionnaireResponse {
   yogaTypeId  String
   yogaType    YogaType @relation(fields: [yogaTypeId], references: [id])
   createdAt   DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ---------- Meditation & Breathing ----------
+
+model MeditationSession {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            String   // "breathing" or "meditation"
+  durationSeconds Int
+  breaths         Int?
+  completed       Boolean  @default(false)
+  createdAt       DateTime @default(now())
 
   @@index([userId])
 }

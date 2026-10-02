@@ -34,6 +34,9 @@ export default async function DashboardPage() {
           <a href="/questionnaire" className="rounded-md bg-sky-500 px-4 py-2 text-sm text-white hover:bg-sky-600">
             Take the questionnaire
           </a>
+          <a href="/meditation" className="rounded-md bg-green-500 px-4 py-2 text-sm text-white hover:bg-green-600">
+            Meditation
+          </a>
           <SignOutButton />
         </div>
       </div>
