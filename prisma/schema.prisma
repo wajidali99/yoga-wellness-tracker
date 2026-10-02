@@ -43,6 +43,7 @@ model User {
   accounts      Account[]
   responses     QuestionnaireResponse[]
   meditations   MeditationSession[]
+  poseChecks    PoseCheck[]
 
   @@map("user")
 }
@@ -133,6 +134,21 @@ model MeditationSession {
   breaths         Int?
   completed       Boolean  @default(false)
   createdAt       DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ---------- AI Pose Validation ----------
+
+model PoseCheck {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  poseSlug       String
+  bestConfidence Float
+  heldSeconds    Int
+  correct        Boolean
+  createdAt      DateTime @default(now())
 
   @@index([userId])
 }
