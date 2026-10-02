@@ -44,6 +44,7 @@ model User {
   responses     QuestionnaireResponse[]
   meditations   MeditationSession[]
   poseChecks    PoseCheck[]
+  hostedSessions GroupSession[]
 
   @@map("user")
 }
@@ -151,4 +152,16 @@ model PoseCheck {
   createdAt      DateTime @default(now())
 
   @@index([userId])
+}
+
+// ---------- Live Group Sessions ----------
+
+model GroupSession {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  title     String
+  hostId    String
+  host      User     @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
 }

@@ -40,6 +40,9 @@ export default async function DashboardPage() {
           <a href="/pose-checker" className="rounded-md bg-purple-500 px-4 py-2 text-sm text-white hover:bg-purple-600">
             Pose Checker
           </a>
+          <a href="/group-session" className="rounded-md bg-orange-500 px-4 py-2 text-sm text-white hover:bg-orange-600">
+            Group Session
+          </a>
           <SignOutButton />
         </div>
       </div>
