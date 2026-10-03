@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signUp } from "@/lib/auth-client";
 import AuthShell from "@/components/auth-shell";
+import SocialButtons from "@/components/social-buttons";
 
 // at least 8 chars, with a letter, a number and a special character
 const strongPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
@@ -97,6 +98,8 @@ export default function SignUpPage() {
           {loading ? "Creating account..." : "Create an account"}
         </button>
       </form>
+
+      <SocialButtons />
 
       <p className="mt-6 text-center text-sm text-gray-500">
         Already have an account?{" "}

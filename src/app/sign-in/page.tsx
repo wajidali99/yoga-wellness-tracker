@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
 import AuthShell from "@/components/auth-shell";
+import SocialButtons from "@/components/social-buttons";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -79,6 +80,8 @@ export default function SignInPage() {
           {loading ? "Signing in..." : "Login"}
         </button>
       </form>
+
+      <SocialButtons />
 
       <p className="mt-6 text-center text-sm text-gray-500">
         Don&apos;t have an account?{" "}

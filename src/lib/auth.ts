@@ -5,6 +5,16 @@ import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
 import { sendEmail, emailLayout } from "@/lib/email";
 
+// only turn on a social login if its keys are in .env
+const socialProviders = {
+  ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+    ? { google: { clientId: process.env.GOOGLE_CLIENT_ID, clientSecret: process.env.GOOGLE_CLIENT_SECRET } }
+    : {}),
+  ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+    ? { github: { clientId: process.env.GITHUB_CLIENT_ID, clientSecret: process.env.GITHUB_CLIENT_SECRET } }
+    : {}),
+};
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -43,6 +53,14 @@ export const auth = betterAuth({
           url
         ),
       });
+    },
+  },
+  socialProviders,
+  // if someone signs in with Google/GitHub using an email that already has an account, link them
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google", "github"],
     },
   },
   user: {
