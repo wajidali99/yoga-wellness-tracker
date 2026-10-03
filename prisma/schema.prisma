@@ -47,6 +47,7 @@ model User {
   hostedSessions GroupSession[]
   reviews       Review[]
   activityLogs  ActivityLog[]
+  challenges    ChallengeParticipant[]
 
   @@map("user")
 }
@@ -190,4 +191,30 @@ model ActivityLog {
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+}
+
+// ---------- Challenges ----------
+
+model Challenge {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  title        String
+  description  String
+  emoji        String
+  durationDays Int
+  tasks        String[] // one task per day
+  participants ChallengeParticipant[]
+}
+
+model ChallengeParticipant {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challengeId   String
+  challenge     Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  completedDays Int[]
+  joinedAt      DateTime  @default(now())
+  completedAt   DateTime?
+
+  @@unique([userId, challengeId])
 }
