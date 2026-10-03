@@ -13,7 +13,8 @@ const KEY_POINTS = [11, 12, 23, 24, 25, 26, 27, 28]; // shoulders, hips, knees, 
 const MIN_CONFIDENCE = 0.7;
 const SMOOTHING_FRAMES = 10;
 
-export default function PoseChecker({ poses }: { poses: PoseOption[] }) {
+export default function PoseChecker({ poses, initialPose }: { poses: PoseOption[]; initialPose?: string }) {
+  const startPose = initialPose && poses.some((p) => p.slug === initialPose) ? initialPose : poses[0]?.slug ?? "";
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const landmarkerRef = useRef<PoseLandmarker | null>(null);
@@ -23,9 +24,9 @@ export default function PoseChecker({ poses }: { poses: PoseOption[] }) {
   const rafRef = useRef(0);
   const historyRef = useRef<number[][]>([]);
   const statsRef = useRef({ held: 0, best: 0, last: 0 });
-  const targetRef = useRef(poses[0]?.slug ?? "");
+  const targetRef = useRef(startPose);
 
-  const [target, setTarget] = useState(poses[0]?.slug ?? "");
+  const [target, setTarget] = useState(startPose);
   const [status, setStatus] = useState<"idle" | "loading" | "running" | "error">("idle");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");

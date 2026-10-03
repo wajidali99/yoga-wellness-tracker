@@ -6,9 +6,11 @@ import { prisma } from "@/lib/prisma";
 import { SUPPORTED_POSES } from "@/lib/pose-classifier";
 import PoseChecker from "@/components/pose-checker";
 
-export default async function PoseCheckerPage() {
+export default async function PoseCheckerPage({ searchParams }: { searchParams: Promise<{ pose?: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/sign-in");
+
+  const { pose } = await searchParams;
 
   const poses = await prisma.yogaPose.findMany({
     where: { slug: { in: SUPPORTED_POSES } },
@@ -23,16 +25,19 @@ export default async function PoseCheckerPage() {
   });
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-100 via-sky-200 to-sky-50 flex flex-col items-center gap-8 p-6">
-      <PoseChecker poses={poses} />
+    <main className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 py-10">
+      <PoseChecker poses={poses} initialPose={pose} />
 
       {recent.length > 0 && (
-        <div className="w-full max-w-5xl rounded-xl bg-white p-6 shadow-lg">
-          <h2 className="mb-3 font-semibold text-gray-800">Your recent checks</h2>
+        <div className="w-full max-w-5xl rounded-2xl border border-sand-200 bg-white p-6 shadow-sm">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="font-semibold text-gray-900">Your recent checks</h2>
+            <Link href="/progress" className="text-sm font-medium text-brand-600 hover:underline">Full progress →</Link>
+          </div>
           <ul className="space-y-2 text-sm">
             {recent.map((r) => (
-              <li key={r.id} className="flex justify-between rounded-md border border-gray-200 px-3 py-2 text-gray-700">
-                <span>{poses.find((p) => p.slug === r.poseSlug)?.name ?? r.poseSlug}</span>
+              <li key={r.id} className="flex flex-wrap justify-between gap-2 rounded-lg border border-gray-100 px-3 py-2 text-gray-700">
+                <span className="font-medium">{poses.find((p) => p.slug === r.poseSlug)?.name ?? r.poseSlug}</span>
                 <span>Best: {Math.round(r.bestConfidence * 100)}%</span>
                 <span>Held: {r.heldSeconds}s</span>
                 <span>{r.correct ? "✅ Correct" : "❌ Keep practicing"}</span>
@@ -41,8 +46,6 @@ export default async function PoseCheckerPage() {
           </ul>
         </div>
       )}
-
-      <Link href="/dashboard" className="text-sm text-sky-700 hover:underline">← Dashboard</Link>
     </main>
   );
 }

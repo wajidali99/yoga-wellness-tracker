@@ -47,15 +47,15 @@ export default function NavbarClient({ user }: { user: User }) {
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-white shadow-sm">
             <Leaf size={20} />
           </span>
-          <span className="hidden sm:inline">Yoga Wellness</span>
+          <span className="hidden whitespace-nowrap sm:inline">Yoga Wellness</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-1 xl:flex">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={`rounded-full px-3 py-1.5 text-sm transition ${
+              className={`whitespace-nowrap rounded-full px-3 py-1.5 text-sm transition ${
                 isActive(l.href) ? "bg-brand-50 font-semibold text-brand-700" : "text-gray-600 hover:text-brand-700"
               }`}
             >
@@ -79,7 +79,7 @@ export default function NavbarClient({ user }: { user: User }) {
               </Link>
               <button
                 onClick={logout}
-                className="hidden items-center gap-1.5 rounded-full border border-gray-200 px-4 py-1.5 text-sm text-gray-700 hover:bg-gray-50 lg:flex"
+                className="hidden whitespace-nowrap items-center gap-1.5 rounded-full border border-gray-200 px-4 py-1.5 text-sm text-gray-700 hover:bg-gray-50 xl:flex"
               >
                 <LogOut size={15} /> Sign out
               </button>
@@ -94,14 +94,14 @@ export default function NavbarClient({ user }: { user: User }) {
               </Link>
             </>
           )}
-          <button onClick={() => setOpen(!open)} className="rounded-lg p-2 text-gray-600 hover:bg-gray-100 lg:hidden" aria-label="Menu">
+          <button onClick={() => setOpen(!open)} className="rounded-lg p-2 text-gray-600 hover:bg-gray-100 xl:hidden" aria-label="Menu">
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
       {open && (
-        <nav className="space-y-1 border-t border-gray-100 bg-white px-4 py-3 lg:hidden">
+        <nav className="space-y-1 border-t border-gray-100 bg-white px-4 py-3 xl:hidden">
           {links.map((l) => (
             <Link
               key={l.href}

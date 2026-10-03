@@ -6,18 +6,16 @@ export const dynamic = "force-dynamic";
 export default async function PosesPage() {
   const poses = await prisma.yogaPose.findMany({
     orderBy: { name: "asc" },
-    select: { id: true, slug: true, name: true, sanskritName: true, difficulty: true, focusArea: true },
+    select: { id: true, slug: true, name: true, sanskritName: true, difficulty: true, focusArea: true, imageUrl: true },
   });
 
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-12">
-      <div className="mx-auto max-w-5xl">
-        <h1 className="text-center text-3xl font-light text-gray-800">Yoga Poses</h1>
-        <p className="mb-8 mt-2 text-center text-gray-500">
-          Explore different yoga poses and improve your practice.
-        </p>
-        <PoseList poses={poses} />
-      </div>
+    <main className="mx-auto max-w-6xl px-4 py-12">
+      <h1 className="text-center text-4xl font-bold text-gray-900">Yoga Poses</h1>
+      <p className="mx-auto mb-8 mt-3 max-w-xl text-center text-gray-600">
+        Explore poses with step-by-step guides. Poses marked <span className="font-semibold text-purple-700">AI check</span> can be practiced with live feedback.
+      </p>
+      <PoseList poses={poses} />
     </main>
   );
 }

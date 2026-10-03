@@ -2,7 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
 import { GOALS } from "@/lib/questionnaire";
-import { deleteReview, setUserRole } from "./actions";
+import { deleteReview, setUserRole, updatePoseMedia } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +11,7 @@ const TABS = [
   { id: "reviews", label: "Reviews" },
   { id: "logs", label: "Activity Logs" },
   { id: "insights", label: "Insights" },
+  { id: "poses", label: "Poses & media" },
 ];
 
 export default async function AdminPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
@@ -65,6 +66,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           {tab === "reviews" && <ReviewsTab />}
           {tab === "logs" && <LogsTab />}
           {tab === "insights" && <InsightsTab />}
+          {tab === "poses" && <PosesTab />}
         </div>
       </div>
     </main>
@@ -199,6 +201,34 @@ async function InsightsTab() {
           ))}
         </ul>
       </div>
+    </div>
+  );
+}
+
+async function PosesTab() {
+  const poses = await prisma.yogaPose.findMany({ orderBy: { name: "asc" } });
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-gray-500">
+        Image: a file in <code>/public/poses</code> (e.g. <code>/poses/tree.jpg</code>) or an https link. Video: any YouTube link.
+      </p>
+      {poses.map((p) => (
+        <form key={p.id} action={updatePoseMedia} className="flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 p-3">
+          <input type="hidden" name="id" value={p.id} />
+          <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md bg-gray-100">
+            {p.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={p.imageUrl} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div className="flex h-full items-center justify-center text-2xl">🧘</div>
+            )}
+          </div>
+          <span className="w-36 font-medium text-gray-800">{p.name}</span>
+          <input name="imageUrl" defaultValue={p.imageUrl ?? ""} placeholder="/poses/name.jpg" className="min-w-40 flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" />
+          <input name="videoUrl" defaultValue={p.videoUrl ?? ""} placeholder="https://www.youtube.com/watch?v=..." className="min-w-52 flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" />
+          <button className="rounded-md bg-brand-500 px-3 py-1.5 text-sm text-white hover:bg-brand-600">Save</button>
+        </form>
+      ))}
     </div>
   );
 }

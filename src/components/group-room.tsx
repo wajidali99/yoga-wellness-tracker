@@ -54,7 +54,6 @@ export default function GroupRoom({ serverUrl, token, code, title, isHost }: Pro
         <VideoConference />
       </LiveKitRoom>
 
-      {/* shown only when the user has really left (or the host ended the session) */}
       {disconnected && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80">
           <div className="rounded-xl bg-white p-8 text-center shadow-lg">
