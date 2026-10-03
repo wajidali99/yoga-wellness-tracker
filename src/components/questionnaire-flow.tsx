@@ -8,9 +8,11 @@ import { submitQuestionnaire } from "@/app/questionnaire/actions";
 export default function QuestionnaireFlow({
   initialGoal,
   initialAnswers,
+  texts = {},
 }: {
   initialGoal: string | null;
   initialAnswers: Record<string, string>;
+  texts?: Record<string, string>;
 }) {
   const router = useRouter();
   const [goalId, setGoalId] = useState<string | null>(initialGoal);
@@ -102,7 +104,7 @@ export default function QuestionnaireFlow({
                   }`}
                 >
                   <div className="text-4xl">{g.emoji}</div>
-                  <div className="mt-2 font-medium text-gray-700">{g.label}</div>
+                  <div className="mt-2 font-medium text-gray-700">{texts[`g:${g.id}`] ?? g.label}</div>
                 </button>
               ))}
             </div>
@@ -113,7 +115,7 @@ export default function QuestionnaireFlow({
               <p className="text-sm text-gray-500">
                 Question {step + 1} of {questions.length}
               </p>
-              <h2 className="mt-1 mb-6 text-xl font-semibold text-gray-800">{question.text}</h2>
+              <h2 className="mt-1 mb-6 text-xl font-semibold text-gray-800">{texts[`q:${question.id}`] ?? question.text}</h2>
               <div className="space-y-3">
                 {question.options.map((o) => (
                   <button
@@ -123,7 +125,7 @@ export default function QuestionnaireFlow({
                       answers[question.id] === o.value ? "border-brand-500 bg-brand-50 text-brand-800" : "border-gray-200 text-gray-700"
                     }`}
                   >
-                    {o.label}
+                    {texts[`o:${question.id}:${o.value}`] ?? o.label}
                   </button>
                 ))}
               </div>

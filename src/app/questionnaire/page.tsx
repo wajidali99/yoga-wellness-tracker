@@ -2,13 +2,12 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getQuestionnaireTexts } from "@/lib/questionnaire-texts";
 import QuestionnaireFlow from "@/components/questionnaire-flow";
 
-export default async function QuestionnairePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ from?: string }>;
-}) {
+export const dynamic = "force-dynamic";
+
+export default async function QuestionnairePage({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/sign-in");
 
@@ -18,18 +17,18 @@ export default async function QuestionnairePage({
   let initialAnswers: Record<string, string> = {};
 
   if (from) {
-    const previous = await prisma.questionnaireResponse.findFirst({
-      where: { id: from, userId: session.user.id },
-    });
+    const previous = await prisma.questionnaireResponse.findFirst({ where: { id: from, userId: session.user.id } });
     if (previous) {
       initialGoal = previous.primaryGoal;
       initialAnswers = previous.answers as Record<string, string>;
     }
   }
 
+  const texts = await getQuestionnaireTexts();
+
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-sand-50 flex items-center justify-center p-6">
-      <QuestionnaireFlow initialGoal={initialGoal} initialAnswers={initialAnswers} />
+    <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-sand-50 p-6">
+      <QuestionnaireFlow initialGoal={initialGoal} initialAnswers={initialAnswers} texts={texts} />
     </main>
   );
 }

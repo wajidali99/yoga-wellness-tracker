@@ -275,3 +275,11 @@ model InstructorFeedback {
 
   @@index([studentId])
 }
+
+// ---------- Admin-editable questionnaire wording ----------
+
+model QuestionText {
+  key       String   @id // "g:<goal>", "q:<question>" or "o:<question>:<option>"
+  text      String
+  updatedAt DateTime @updatedAt
+}

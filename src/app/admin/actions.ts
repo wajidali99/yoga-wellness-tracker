@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
 import { logActivity } from "@/lib/activity";
 import { toYouTubeEmbed } from "@/lib/youtube";
+import { allTextDefaults } from "@/lib/questionnaire-texts";
 
 export async function deleteReview(formData: FormData) {
   const admin = await requireAdmin();
@@ -46,4 +47,54 @@ export async function updatePoseMedia(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/poses");
   revalidatePath(`/poses/${pose.slug}`);
+}
+
+export async function saveQuestionTexts(formData: FormData) {
+  const admin = await requireAdmin();
+  const defaults = allTextDefaults();
+
+  for (const [name, raw] of formData.entries()) {
+    if (!name.startsWith("t:")) continue;
+    const key = name.slice(2);
+    if (!(key in defaults)) continue; // only known questions/options can be edited
+
+    const text = String(raw).trim().slice(0, 200);
+    if (!text || text === defaults[key]) {
+      await prisma.questionText.deleteMany({ where: { key } }); // back to default wording
+    } else {
+      await prisma.questionText.upsert({ where: { key }, update: { text }, create: { key, text } });
+    }
+  }
+
+  await logActivity(admin.id, "ADMIN_EDITED_QUESTIONNAIRE");
+  revalidatePath("/admin");
+  revalidatePath("/questionnaire");
+}
+
+export async function updateYogaType(formData: FormData) {
+  const admin = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const durationMinutes = Number(formData.get("durationMinutes") ?? 0);
+  if (durationMinutes < 5 || durationMinutes > 120) return;
+
+  // keep only pose slugs that really exist, in the admin's order
+  const wanted = String(formData.get("poseSlugs") ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  const existing = await prisma.yogaPose.findMany({ where: { slug: { in: wanted } }, select: { slug: true } });
+  const poseSlugs = wanted.filter((s) => existing.some((e) => e.slug === s));
+
+  const text = (field: string) => String(formData.get(field) ?? "").trim().slice(0, 500);
+
+  const type = await prisma.yogaType.update({
+    where: { id },
+    data: {
+      description: text("description"),
+      primaryBenefit: text("primaryBenefit"),
+      frequency: text("frequency"),
+      focusArea: text("focusArea"),
+      durationMinutes,
+      poseSlugs,
+    },
+  });
+  await logActivity(admin.id, "ADMIN_UPDATED_YOGA_TYPE", type.slug);
+  revalidatePath("/admin");
 }

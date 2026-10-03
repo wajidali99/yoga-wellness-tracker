@@ -2,7 +2,9 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
 import { GOALS } from "@/lib/questionnaire";
-import { deleteReview, setUserRole, updatePoseMedia } from "./actions";
+import { deleteReview, setUserRole, updatePoseMedia, saveQuestionTexts, updateYogaType } from "./actions";
+import { getQuestionnaireTexts } from "@/lib/questionnaire-texts";
+import { getQuestions } from "@/lib/questionnaire";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +14,8 @@ const TABS = [
   { id: "logs", label: "Activity Logs" },
   { id: "insights", label: "Insights" },
   { id: "poses", label: "Poses & media" },
+  { id: "questionnaire", label: "Questionnaire" },
+  { id: "yogatypes", label: "Yoga types" },
 ];
 
 export default async function AdminPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
@@ -67,6 +71,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           {tab === "logs" && <LogsTab />}
           {tab === "insights" && <InsightsTab />}
           {tab === "poses" && <PosesTab />}
+          {tab === "questionnaire" && <QuestionnaireTab />}
+          {tab === "yogatypes" && <YogaTypesTab />}
         </div>
       </div>
     </main>
@@ -225,6 +231,92 @@ async function PosesTab() {
           <input name="imageUrl" defaultValue={p.imageUrl ?? ""} placeholder="/poses/name.jpg" className="min-w-40 flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" />
           <input name="videoUrl" defaultValue={p.videoUrl ?? ""} placeholder="https://www.youtube.com/watch?v=..." className="min-w-52 flex-1 rounded-md border border-gray-300 px-2 py-1.5 text-sm" />
           <button className="rounded-md bg-brand-500 px-3 py-1.5 text-sm text-white hover:bg-brand-600">Save</button>
+        </form>
+      ))}
+    </div>
+  );
+}
+
+const field = "w-full rounded-md border border-gray-300 px-2 py-1.5 text-sm text-gray-900";
+
+async function QuestionnaireTab() {
+  const texts = await getQuestionnaireTexts();
+  // every question once (some, like "severity", are shared by several goals)
+  const questions = [...new Map(GOALS.flatMap((g) => getQuestions(g.id)).map((q) => [q.id, q])).values()];
+
+  return (
+    <div className="space-y-6">
+      <p className="rounded-lg bg-sky-50 p-3 text-sm text-sky-800">
+        Change the wording users see. Leave a box empty to use the default (shown in grey). Scoring rules stay the same, so
+        recommendations remain valid.
+      </p>
+
+      <form action={saveQuestionTexts} className="rounded-lg border border-gray-200 p-4">
+        <h3 className="mb-3 font-semibold text-gray-800">Goals</h3>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {GOALS.map((g) => (
+            <input key={g.id} name={`t:g:${g.id}`} defaultValue={texts[`g:${g.id}`] ?? ""} placeholder={g.label} className={field} />
+          ))}
+        </div>
+        <button className="mt-3 rounded-md bg-brand-500 px-4 py-1.5 text-sm text-white hover:bg-brand-600">Save goals</button>
+      </form>
+
+      {questions.map((q) => (
+        <form key={q.id} action={saveQuestionTexts} className="rounded-lg border border-gray-200 p-4">
+          <p className="text-xs font-mono text-gray-400">{q.id}</p>
+          <input name={`t:q:${q.id}`} defaultValue={texts[`q:${q.id}`] ?? ""} placeholder={q.text} className={`${field} mt-1 font-medium`} />
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            {q.options.map((o) => (
+              <input
+                key={o.value}
+                name={`t:o:${q.id}:${o.value}`}
+                defaultValue={texts[`o:${q.id}:${o.value}`] ?? ""}
+                placeholder={o.label}
+                className={field}
+              />
+            ))}
+          </div>
+          <button className="mt-3 rounded-md bg-brand-500 px-4 py-1.5 text-sm text-white hover:bg-brand-600">Save</button>
+        </form>
+      ))}
+    </div>
+  );
+}
+
+async function YogaTypesTab() {
+  const types = await prisma.yogaType.findMany({ orderBy: { name: "asc" } });
+  const poses = await prisma.yogaPose.findMany({ select: { slug: true }, orderBy: { slug: "asc" } });
+
+  return (
+    <div className="space-y-6">
+      <p className="rounded-lg bg-sky-50 p-3 text-sm text-sky-800">
+        Available pose slugs: <span className="font-mono">{poses.map((p) => p.slug).join(", ")}</span>
+      </p>
+      {types.map((t) => (
+        <form key={t.id} action={updateYogaType} className="rounded-lg border border-gray-200 p-4">
+          <input type="hidden" name="id" value={t.id} />
+          <h3 className="font-semibold text-gray-800">{t.name}</h3>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <label className="text-xs text-gray-500 sm:col-span-2">Description
+              <textarea name="description" defaultValue={t.description} rows={2} className={field} />
+            </label>
+            <label className="text-xs text-gray-500">Primary benefit
+              <input name="primaryBenefit" defaultValue={t.primaryBenefit} className={field} />
+            </label>
+            <label className="text-xs text-gray-500">How often
+              <input name="frequency" defaultValue={t.frequency} className={field} />
+            </label>
+            <label className="text-xs text-gray-500">Focus area
+              <input name="focusArea" defaultValue={t.focusArea} className={field} />
+            </label>
+            <label className="text-xs text-gray-500">Session length (minutes)
+              <input name="durationMinutes" type="number" min={5} max={120} defaultValue={t.durationMinutes} className={field} />
+            </label>
+            <label className="text-xs text-gray-500 sm:col-span-2">Poses (comma separated slugs, in order)
+              <input name="poseSlugs" defaultValue={t.poseSlugs.join(", ")} className={`${field} font-mono`} />
+            </label>
+          </div>
+          <button className="mt-3 rounded-md bg-brand-500 px-4 py-1.5 text-sm text-white hover:bg-brand-600">Save</button>
         </form>
       ))}
     </div>
