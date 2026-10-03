@@ -48,6 +48,7 @@ model User {
   reviews       Review[]
   activityLogs  ActivityLog[]
   challenges    ChallengeParticipant[]
+  gameScores    GameScore[]
 
   @@map("user")
 }
@@ -217,4 +218,18 @@ model ChallengeParticipant {
   completedAt   DateTime?
 
   @@unique([userId, challengeId])
+}
+
+// ---------- Brain Games ----------
+
+model GameScore {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game            String   // "memory" | "focus" | "stroop"
+  score           Int
+  durationSeconds Int?
+  createdAt       DateTime @default(now())
+
+  @@index([game, score])
 }

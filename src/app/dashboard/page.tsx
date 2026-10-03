@@ -2,7 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
-  ArrowRight, Camera, ClipboardList, PersonStanding, Wind, Users, Star, ShieldCheck,
+  ArrowRight, Camera, ClipboardList, PersonStanding, Wind, Users, Star, ShieldCheck, Trophy, Gamepad2,
   Target, CheckCircle2, Timer, Sparkles,
 } from "lucide-react";
 import { auth } from "@/lib/auth";
@@ -15,6 +15,8 @@ const FEATURES = [
   { href: "/pose-checker", title: "AI Pose Checker", desc: "Real-time feedback on your form.", icon: Camera, tint: "bg-purple-50 text-purple-600" },
   { href: "/meditation", title: "Breathing & Meditation", desc: "Calm your mind in a few minutes.", icon: Wind, tint: "bg-emerald-50 text-emerald-600" },
   { href: "/group-session", title: "Group Sessions", desc: "Practice live with others.", icon: Users, tint: "bg-orange-50 text-orange-600" },
+  { href: "/challenges", title: "Challenges", desc: "Daily tasks and badges.", icon: Trophy, tint: "bg-rose-50 text-rose-600" },
+  { href: "/games", title: "Brain Games", desc: "Train your focus and memory.", icon: Gamepad2, tint: "bg-indigo-50 text-indigo-600" },
   { href: "/reviews", title: "Reviews", desc: "Share your experience.", icon: Star, tint: "bg-amber-50 text-amber-600" },
 ];
 
