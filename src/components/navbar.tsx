@@ -4,6 +4,9 @@ import NavbarClient from "@/components/navbar-client";
 
 export default async function Navbar() {
   const session = await auth.api.getSession({ headers: await headers() });
-  const user = session ? { name: session.user.name, isAdmin: session.user.role === "ADMIN" } : null;
+  const role = session?.user.role;
+  const user = session
+    ? { name: session.user.name, isAdmin: role === "ADMIN", isInstructor: role === "INSTRUCTOR" || role === "ADMIN" }
+    : null;
   return <NavbarClient user={user} />;
 }

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Leaf, Menu, X, LogOut, ChevronDown } from "lucide-react";
 import { signOut } from "@/lib/auth-client";
 
-type User = { name: string; isAdmin: boolean } | null;
+type User = { name: string; isAdmin: boolean; isInstructor: boolean } | null;
 
 const MAIN_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
@@ -18,6 +18,7 @@ const MAIN_LINKS = [
 ];
 
 const MORE_LINKS = [
+  { href: "/classes", label: "Live Classes" },
   { href: "/challenges", label: "Challenges" },
   { href: "/games", label: "Brain Games" },
   { href: "/group-session", label: "Group Session" },
@@ -50,7 +51,7 @@ export default function NavbarClient({ user }: { user: User }) {
   if (/^\/group-session\/[^/]+$/.test(pathname)) return null;
 
   const main = user ? MAIN_LINKS : [{ href: "/poses", label: "Poses" }];
-  const more = user ? [...MORE_LINKS, ...(user.isAdmin ? [{ href: "/admin", label: "Admin" }] : [])] : [];
+  const more = user ? [...MORE_LINKS, ...(user.isInstructor ? [{ href: "/instructor", label: "Instructor Studio" }] : []), ...(user.isAdmin ? [{ href: "/admin", label: "Admin" }] : [])] : [];
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
   const moreActive = more.some((l) => isActive(l.href));
 

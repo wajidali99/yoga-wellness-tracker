@@ -49,6 +49,10 @@ model User {
   activityLogs  ActivityLog[]
   challenges    ChallengeParticipant[]
   gameScores    GameScore[]
+  classesTaught    YogaClass[]          @relation("InstructorClasses")
+  enrollments      ClassEnrollment[]
+  feedbackGiven    InstructorFeedback[] @relation("FeedbackGiven")
+  feedbackReceived InstructorFeedback[] @relation("FeedbackReceived")
 
   @@map("user")
 }
@@ -232,4 +236,42 @@ model GameScore {
   createdAt       DateTime @default(now())
 
   @@index([game, score])
+}
+
+// ---------- Instructor: classes & feedback ----------
+
+model YogaClass {
+  id              String            @id @default(cuid())
+  title           String
+  description     String
+  instructorId    String
+  instructor      User              @relation("InstructorClasses", fields: [instructorId], references: [id], onDelete: Cascade)
+  startsAt        DateTime
+  durationMinutes Int
+  sessionCode     String?
+  enrollments     ClassEnrollment[]
+  createdAt       DateTime          @default(now())
+}
+
+model ClassEnrollment {
+  id        String    @id @default(cuid())
+  classId   String
+  yogaClass YogaClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+
+  @@unique([classId, userId])
+}
+
+model InstructorFeedback {
+  id           String   @id @default(cuid())
+  instructorId String
+  instructor   User     @relation("FeedbackGiven", fields: [instructorId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      User     @relation("FeedbackReceived", fields: [studentId], references: [id], onDelete: Cascade)
+  message      String
+  createdAt    DateTime @default(now())
+
+  @@index([studentId])
 }

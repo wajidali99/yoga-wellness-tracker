@@ -18,7 +18,7 @@ export async function setUserRole(formData: FormData) {
   const admin = await requireAdmin();
   const userId = String(formData.get("userId") ?? "");
   const role = String(formData.get("role") ?? "");
-  if (role !== "USER" && role !== "ADMIN") return;
+  if (!["USER", "INSTRUCTOR", "ADMIN"].includes(role)) return;
   if (userId === admin.id) return; // admins cannot change their own role
 
   await prisma.user.update({ where: { id: userId }, data: { role } });

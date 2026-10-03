@@ -89,12 +89,10 @@ async function UsersTab({ adminId }: { adminId: string }) {
             <td>{u.createdAt.toLocaleDateString()}</td>
             <td className="text-right">
               {u.id !== adminId && (
-                <form action={setUserRole}>
+                <form action={setUserRole} className="flex justify-end gap-2">
                   <input type="hidden" name="userId" value={u.id} />
-                  <input type="hidden" name="role" value={u.role === "ADMIN" ? "USER" : "ADMIN"} />
-                  <button className="rounded-md border border-gray-300 px-3 py-1 text-xs hover:bg-gray-50">
-                    {u.role === "ADMIN" ? "Remove admin" : "Make admin"}
-                  </button>
+                  <select name="role" defaultValue={u.role} className="rounded-md border border-gray-300 px-2 py-1 text-xs"><option value="USER">USER</option><option value="INSTRUCTOR">INSTRUCTOR</option><option value="ADMIN">ADMIN</option></select>
+                  <button className="rounded-md bg-brand-500 px-3 py-1 text-xs text-white hover:bg-brand-600">Save</button>
                 </form>
               )}
             </td>

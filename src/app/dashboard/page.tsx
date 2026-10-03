@@ -8,6 +8,7 @@ import {
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import SignOutButton from "@/components/sign-out-button";
+import FeedbackPanel from "@/components/feedback-panel";
 
 const FEATURES = [
   { href: "/questionnaire", title: "My Yoga Plan", desc: "Get a yoga style made for your goal.", icon: ClipboardList, tint: "bg-sky-50 text-sky-600" },
@@ -141,6 +142,8 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
+
+      <FeedbackPanel userId={userId} />
 
       {/* features */}
       <h2 className="mt-12 text-xl font-bold text-gray-900">Explore</h2>
