@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import SignOutButton from "@/components/sign-out-button";
 import FeedbackPanel from "@/components/feedback-panel";
+import VerifyEmailBanner from "@/components/verify-email-banner";
 
 const FEATURES = [
   { href: "/questionnaire", title: "My Yoga Plan", desc: "Get a yoga style made for your goal.", icon: ClipboardList, tint: "bg-sky-50 text-sky-600" },
@@ -59,6 +60,8 @@ export default async function DashboardPage() {
           <Camera size={18} /> Start practicing
         </Link>
       </div>
+
+      {!user.emailVerified && <VerifyEmailBanner email={user.email} />}
 
       {/* stats */}
       <div className="mt-8 grid gap-4 sm:grid-cols-3">

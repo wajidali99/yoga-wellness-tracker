@@ -18,7 +18,7 @@ export default async function ProfilePage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
           <p className="text-gray-500">
-            {user.email} · <span className="font-medium text-gray-700">{user.role}</span> · joined {user.createdAt.toLocaleDateString()}
+            {user.email} {user.emailVerified ? "✅ verified" : "· not verified"} · <span className="font-medium text-gray-700">{user.role}</span> · joined {user.createdAt.toLocaleDateString()}
           </p>
         </div>
       </div>

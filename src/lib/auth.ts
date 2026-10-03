@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { prisma } from "@/lib/prisma";
 import { logActivity } from "@/lib/activity";
+import { sendEmail, emailLayout } from "@/lib/email";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -11,6 +12,38 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }) => {
+      void sendEmail({
+        to: user.email,
+        subject: "Reset your Yoga Wellness password",
+        html: emailLayout(
+          "Reset your password",
+          `Hi ${user.name}, click the button below to choose a new password. This link expires in 1 hour.`,
+          "Reset password",
+          url
+        ),
+      });
+    },
+    onPasswordReset: async ({ user }) => {
+      await logActivity(user.id, "PASSWORD_RESET");
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      void sendEmail({
+        to: user.email,
+        subject: "Verify your email for Yoga Wellness",
+        html: emailLayout(
+          "Verify your email",
+          `Welcome ${user.name}! Please confirm that this is your email address.`,
+          "Verify email",
+          url
+        ),
+      });
+    },
   },
   user: {
     additionalFields: {
