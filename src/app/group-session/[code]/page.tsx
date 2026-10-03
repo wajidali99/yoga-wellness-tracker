@@ -10,10 +10,10 @@ export const dynamic = "force-dynamic";
 
 function Message({ text }: { text: string }) {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-100 via-sky-200 to-sky-50 flex items-center justify-center p-6">
+    <main className="min-h-[calc(100vh-4rem)] bg-sand-50 flex items-center justify-center p-6">
       <div className="rounded-xl bg-white p-8 text-center shadow-lg">
         <p className="text-gray-700">{text}</p>
-        <Link href="/group-session" className="mt-4 inline-block rounded-md bg-sky-500 px-4 py-2 text-white hover:bg-sky-600">
+        <Link href="/group-session" className="mt-4 inline-block rounded-lg bg-brand-500 px-4 py-2 text-white hover:bg-brand-600">
           Back to sessions
         </Link>
       </div>

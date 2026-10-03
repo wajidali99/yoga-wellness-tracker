@@ -184,7 +184,7 @@ export default function PoseChecker({ poses, initialPose }: { poses: PoseOption[
   }
 
   return (
-    <div className="w-full max-w-5xl rounded-xl bg-white p-6 shadow-lg">
+    <div className="w-full max-w-5xl rounded-2xl border border-sand-200 bg-white p-6 shadow-sm">
       <h1 className="text-2xl font-semibold text-gray-800">Yoga Pose Checker</h1>
       <p className="text-sm text-gray-500">Choose a pose, stand back so your whole body is in view, and hold the pose.</p>
 
@@ -196,7 +196,7 @@ export default function PoseChecker({ poses, initialPose }: { poses: PoseOption[
             setTarget(e.target.value);
             targetRef.current = e.target.value;
           }}
-          className="rounded-md border border-gray-300 px-3 py-2 text-gray-800"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-gray-800"
         >
           {poses.map((p) => (
             <option key={p.slug} value={p.slug}>{p.name}</option>
@@ -204,20 +204,20 @@ export default function PoseChecker({ poses, initialPose }: { poses: PoseOption[
         </select>
 
         {status === "running" ? (
-          <button onClick={stop} className="rounded-md bg-red-500 px-5 py-2 text-white hover:bg-red-600">Stop</button>
+          <button onClick={stop} className="rounded-lg bg-red-500 px-5 py-2 text-white hover:bg-red-600">Stop</button>
         ) : (
           <button
             onClick={start}
             disabled={status === "loading"}
-            className="rounded-md bg-green-500 px-5 py-2 text-white hover:bg-green-600 disabled:opacity-60"
+            className="rounded-lg bg-green-500 px-5 py-2 text-white hover:bg-green-600 disabled:opacity-60"
           >
             {status === "loading" ? "Loading AI model..." : "Start camera"}
           </button>
         )}
       </div>
 
-      {error && <p className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-600">{error}</p>}
-      {summary && <p className="mt-4 rounded-md bg-sky-50 p-3 text-sm text-sky-800">{summary}</p>}
+      {error && <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</p>}
+      {summary && <p className="mt-4 rounded-lg bg-brand-50 p-3 text-sm text-brand-800">{summary}</p>}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
         {/* camera (mirrored like a mirror) */}

@@ -8,7 +8,7 @@ export default async function BreathingPage() {
   if (!session) redirect("/sign-in");
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-100 via-sky-200 to-sky-50 flex items-center justify-center p-6">
+    <main className="min-h-[calc(100vh-4rem)] bg-sand-50 flex items-center justify-center p-6">
       <BreathingSession />
     </main>
   );

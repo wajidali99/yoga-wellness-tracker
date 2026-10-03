@@ -82,8 +82,8 @@ export default function BreathingSession() {
   const scale = phase === "Inhale" || phase === "Hold" ? 1.5 : 1;
 
   return (
-    <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
-      <h1 className="text-center text-2xl font-semibold text-red-500">Deep Breathing Session</h1>
+    <div className="w-full max-w-md rounded-2xl border border-sand-200 bg-white p-8 shadow-sm">
+      <h1 className="text-center text-2xl font-bold text-gray-900">Deep Breathing Session</h1>
 
       <label className="mt-6 block text-sm text-gray-600">Select Time Duration:</label>
       <select
@@ -94,7 +94,7 @@ export default function BreathingSession() {
           setRemaining(Number(e.target.value));
           setStatus("idle");
         }}
-        className="mt-1 rounded-md border border-gray-300 px-3 py-2 text-gray-800"
+        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 text-gray-800"
       >
         {DURATIONS.map((d) => (
           <option key={d.value} value={d.value}>{d.label}</option>
@@ -104,7 +104,7 @@ export default function BreathingSession() {
       {/* breathing circle */}
       <div className="my-10 flex h-56 items-center justify-center">
         <div
-          className="flex h-32 w-32 items-center justify-center rounded-full border-[10px] border-green-400 bg-green-50"
+          className="flex h-32 w-32 items-center justify-center rounded-full border-[10px] border-brand-400 bg-brand-50"
           style={{ transform: `scale(${scale})`, transition: `transform ${PHASE}s ease-in-out` }}
         >
           <div className="text-center" style={{ transform: `scale(${1 / scale})`, transition: `transform ${PHASE}s ease-in-out` }}>
@@ -116,20 +116,20 @@ export default function BreathingSession() {
 
       <p className="text-center text-3xl font-semibold text-gray-800">{formatTime(remaining)}</p>
       {status === "done" && (
-        <p className="mt-2 text-center text-green-600">Well done! You completed {Math.floor(duration / CYCLE)} breathing cycles. 🌿</p>
+        <p className="mt-2 text-center text-brand-600">Well done! You completed {Math.floor(duration / CYCLE)} breathing cycles. 🌿</p>
       )}
 
       <div className="mt-6 flex justify-center gap-3">
         {!active ? (
-          <button onClick={start} className="rounded-md bg-green-500 px-6 py-2 text-white hover:bg-green-600">
+          <button onClick={start} className="rounded-lg bg-brand-500 px-6 py-2 text-white hover:bg-brand-600">
             {status === "done" ? "Start again" : "Start"}
           </button>
         ) : (
           <>
-            <button onClick={togglePause} className="rounded-md bg-yellow-500 px-5 py-2 text-white hover:bg-yellow-600">
+            <button onClick={togglePause} className="rounded-lg bg-yellow-500 px-5 py-2 text-white hover:bg-yellow-600">
               {status === "paused" ? "Resume" : "Pause"}
             </button>
-            <button onClick={() => finish(false)} className="rounded-md bg-red-500 px-5 py-2 text-white hover:bg-red-600">
+            <button onClick={() => finish(false)} className="rounded-lg bg-red-500 px-5 py-2 text-white hover:bg-red-600">
               Stop
             </button>
           </>
@@ -141,14 +141,14 @@ export default function BreathingSession() {
         value={track}
         disabled={active}
         onChange={(e) => setTrack(e.target.value as Track)}
-        className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-gray-800"
+        className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-800"
       >
         {TRACKS.map((t) => (
           <option key={t.value} value={t.value}>{t.label}</option>
         ))}
       </select>
 
-      <Link href="/meditation" className="mt-6 inline-block rounded-md bg-sky-500 px-4 py-2 text-sm text-white hover:bg-sky-600">
+      <Link href="/meditation" className="mt-6 inline-block rounded-lg bg-brand-500 px-4 py-2 text-sm text-white hover:bg-brand-600">
         ← Back
       </Link>
     </div>

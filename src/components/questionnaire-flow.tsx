@@ -84,11 +84,11 @@ export default function QuestionnaireFlow({
           <span>{percent}%</span>
         </div>
         <div className="h-2 w-full rounded-full bg-white/70">
-          <div className="h-2 rounded-full bg-sky-500 transition-all" style={{ width: `${percent}%` }} />
+          <div className="h-2 rounded-full bg-brand-500 transition-all" style={{ width: `${percent}%` }} />
         </div>
       </div>
 
-      <div className="rounded-xl bg-white p-8 shadow-lg">
+      <div className="rounded-2xl border border-sand-200 bg-white p-8 shadow-sm">
         {onGoalScreen ? (
           <>
             <h1 className="mb-6 text-center text-2xl font-semibold text-gray-800">What is your Primary Goal?</h1>
@@ -97,8 +97,8 @@ export default function QuestionnaireFlow({
                 <button
                   key={g.id}
                   onClick={() => chooseGoal(g.id)}
-                  className={`rounded-xl border-2 p-4 text-center transition hover:border-sky-400 ${
-                    goalId === g.id ? "border-sky-500 bg-sky-50" : "border-gray-200"
+                  className={`rounded-xl border-2 p-4 text-center transition hover:border-brand-400 ${
+                    goalId === g.id ? "border-brand-500 bg-brand-50" : "border-gray-200"
                   }`}
                 >
                   <div className="text-4xl">{g.emoji}</div>
@@ -119,8 +119,8 @@ export default function QuestionnaireFlow({
                   <button
                     key={o.value}
                     onClick={() => selectAnswer(question.id, o.value)}
-                    className={`w-full rounded-lg border-2 px-4 py-3 text-left transition hover:border-sky-400 ${
-                      answers[question.id] === o.value ? "border-sky-500 bg-sky-50 text-sky-800" : "border-gray-200 text-gray-700"
+                    className={`w-full rounded-lg border-2 px-4 py-3 text-left transition hover:border-brand-400 ${
+                      answers[question.id] === o.value ? "border-brand-500 bg-brand-50 text-brand-800" : "border-gray-200 text-gray-700"
                     }`}
                   >
                     {o.label}
@@ -128,22 +128,22 @@ export default function QuestionnaireFlow({
                 ))}
               </div>
 
-              {error && <p className="mt-4 rounded-md bg-red-50 p-2 text-sm text-red-600">{error}</p>}
+              {error && <p className="mt-4 rounded-lg bg-red-50 p-2 text-sm text-red-600">{error}</p>}
 
               <div className="mt-8 flex justify-between">
-                <button onClick={back} className="rounded-md border border-gray-300 px-5 py-2 text-gray-700 hover:bg-gray-50">
+                <button onClick={back} className="rounded-lg border border-gray-300 px-5 py-2 text-gray-700 hover:bg-gray-50">
                   ← Back
                 </button>
                 {isLast ? (
                   <button
                     onClick={submit}
                     disabled={submitting}
-                    className="rounded-md bg-green-500 px-5 py-2 font-medium text-white hover:bg-green-600 disabled:opacity-60"
+                    className="rounded-lg bg-brand-500 px-5 py-2 font-medium text-white hover:bg-brand-600 disabled:opacity-60"
                   >
                     {submitting ? "Submitting..." : "Submit"}
                   </button>
                 ) : (
-                  <button onClick={next} className="rounded-md bg-sky-500 px-5 py-2 font-medium text-white hover:bg-sky-600">
+                  <button onClick={next} className="rounded-lg bg-brand-500 px-5 py-2 font-medium text-white hover:bg-brand-600">
                     Next →
                   </button>
                 )}

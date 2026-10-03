@@ -19,8 +19,8 @@ export default async function ReviewsPage() {
   const average = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-100 via-sky-200 to-sky-50 flex flex-col items-center gap-8 p-6">
-      <div className="w-full max-w-2xl rounded-xl bg-white p-8 shadow-lg">
+    <main className="min-h-[calc(100vh-4rem)] bg-sand-50 flex flex-col items-center gap-8 p-6">
+      <div className="w-full max-w-2xl rounded-2xl border border-sand-200 bg-white p-8 shadow-sm">
         <h1 className="text-2xl font-semibold text-gray-800">Reviews</h1>
         <p className="mt-1 text-sm text-gray-500">
           {reviews.length > 0
@@ -35,7 +35,7 @@ export default async function ReviewsPage() {
       {reviews.length > 0 && (
         <div className="w-full max-w-2xl space-y-3">
           {reviews.map((r) => (
-            <div key={r.id} className="rounded-xl bg-white p-5 shadow">
+            <div key={r.id} className="rounded-2xl border border-sand-200 bg-white p-5 shadow-sm">
               <div className="flex items-center justify-between">
                 <p className="font-medium text-gray-800">{r.user.name}</p>
                 <p className="text-yellow-400">{"★".repeat(r.rating)}<span className="text-gray-300">{"★".repeat(5 - r.rating)}</span></p>
@@ -47,7 +47,7 @@ export default async function ReviewsPage() {
         </div>
       )}
 
-      <Link href="/dashboard" className="text-sm text-sky-700 hover:underline">← Dashboard</Link>
+      <Link href="/dashboard" className="text-sm text-brand-700 hover:underline">← Dashboard</Link>
     </main>
   );
 }

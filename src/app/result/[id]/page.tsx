@@ -34,14 +34,14 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-100 via-sky-200 to-sky-50 px-6 py-12">
+    <main className="min-h-[calc(100vh-4rem)] bg-sand-50 px-6 py-12">
       <div className="mx-auto max-w-4xl">
-        <div className="rounded-xl bg-white p-8 shadow-lg">
+        <div className="rounded-2xl border border-sand-200 bg-white p-8 shadow-sm">
           <p className="text-sm text-gray-500">
             Your goal: {goal?.emoji} {goal?.label}
           </p>
           <h1 className="mt-2 text-3xl font-semibold text-gray-800">
-            We recommend: <span className="text-sky-600">{yogaType.name}</span>
+            We recommend: <span className="text-brand-600">{yogaType.name}</span>
           </h1>
           <p className="mt-4 text-gray-700">{yogaType.description}</p>
 
@@ -55,7 +55,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
           </div>
 
           {answers.severity === "severe" && (
-            <p className="mt-6 rounded-md bg-amber-50 p-4 text-sm text-amber-800">
+            <p className="mt-6 rounded-lg bg-amber-50 p-4 text-sm text-amber-800">
               ⚠️ You mentioned severe pain or a recent injury. Please check with a doctor or physiotherapist
               before starting, and stop any pose that causes pain.
             </p>
@@ -64,11 +64,11 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href={`/questionnaire?from=${response.id}`}
-              className="rounded-md border border-sky-500 px-5 py-2 text-sky-600 hover:bg-sky-50"
+              className="rounded-lg border border-brand-500 px-5 py-2 text-brand-600 hover:bg-brand-50"
             >
               ← Change my answers
             </Link>
-            <Link href="/dashboard" className="rounded-md bg-sky-500 px-5 py-2 text-white hover:bg-sky-600">
+            <Link href="/dashboard" className="rounded-lg bg-brand-500 px-5 py-2 text-white hover:bg-brand-600">
               Go to dashboard
             </Link>
           </div>
