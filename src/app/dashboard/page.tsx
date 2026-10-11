@@ -131,13 +131,10 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {user.role === "ADMIN" && (
-              <Link href="/admin" className="inline-flex items-center gap-1.5 rounded-md bg-gray-800 px-3 py-2 text-sm text-white hover:bg-gray-900">
+              <Link href="/admin/dashboard" className="inline-flex items-center gap-1.5 rounded-md bg-gray-800 px-3 py-2 text-sm text-white hover:bg-gray-900">
                 <ShieldCheck size={16} /> Admin Panel
               </Link>
             )}
-            <Link href="/profile" className="rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
-              Edit profile
-            </Link>
             <Link href="/profile" className="rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
               Edit profile
             </Link>

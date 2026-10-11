@@ -49,9 +49,10 @@ export default function NavbarClient({ user }: { user: User }) {
 
   // the live video room uses the full screen, so hide the navbar there
   if (/^\/group-session\/[^/]+$/.test(pathname)) return null;
+    if (pathname.startsWith("/admin/")) return null;
 
   const main = user ? MAIN_LINKS : [{ href: "/poses", label: "Poses" }];
-  const more = user ? [...MORE_LINKS, ...(user.isInstructor ? [{ href: "/instructor", label: "Instructor Studio" }] : []), ...(user.isAdmin ? [{ href: "/admin", label: "Admin" }] : [])] : [];
+  const more = user ? [...MORE_LINKS, ...(user.isInstructor ? [{ href: "/instructor", label: "Instructor Studio" }] : []), ...(user.isAdmin ? [{ href: "/admin/dashboard", label: "Admin" }] : [])] : [];
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
   const moreActive = more.some((l) => isActive(l.href));
 
